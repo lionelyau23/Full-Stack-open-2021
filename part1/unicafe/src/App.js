@@ -6,11 +6,11 @@ const DisplayHeading = ({text}) => (
   </h1>
 )
 
-const StatisticLine = ({text, stat}) => (
-  <div>
-    {text} {stat}
-  </div>
-)
+// const StatisticLine = ({text, stat}) => (
+//   <div>
+//     {text} {stat}
+//   </div>
+// )
 
 const Statistics = ({good, neutral, bad}) => {
   const all = good + neutral + bad
@@ -28,12 +28,34 @@ const Statistics = ({good, neutral, bad}) => {
     return (
       <div>
         <DisplayHeading text={'statistics'} />
-        <StatisticLine text={'good'} stat={good} />
-        <StatisticLine text={'neutral'} stat={neutral} />
-        <StatisticLine text={'bad'} stat={bad} />
-        <StatisticLine text={'all'} stat={all} />
-        <StatisticLine text={'average'} stat={average} />
-        <StatisticLine text={'positive'} stat={''.concat(positive,' %')} />
+        <table>
+          <tbody>
+            <tr>
+              <td>good</td>
+              <td>{good}</td>
+            </tr>
+            <tr>
+              <td>neutral</td>
+              <td>{neutral}</td>
+            </tr>
+            <tr>
+              <td>bad</td>
+              <td>{bad}</td>
+            </tr>
+            <tr>
+              <td>all</td>
+              <td>{all}</td>
+            </tr>
+            <tr>
+              <td>average</td>
+              <td>{average.toFixed(1)}</td>
+            </tr>
+            <tr>
+              <td>positive</td>
+              <td>{positive.toFixed(1)} %</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     )  
   }
