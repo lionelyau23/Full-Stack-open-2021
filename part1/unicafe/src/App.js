@@ -12,30 +12,22 @@ const DisplayStat = ({name, stat}) => (
   </div>
 )
 
- 
 const Button = ({onClick, text}) => (
   <button onClick={onClick}>
     {text}
   </button>
 )
 
-
 function App() {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-  const [all, setAll] = useState(0)
-  const [total, setTotal] = useState(0)
 
-  const [average, setAverage] = useState(0)
-  const [positive, setPositive] = useState(0)
+  const all = good + neutral + bad
+  const average = (good - bad) / all
+  const positive = good / all * 100
 
   const setScore = (score) => () => {
-    setAll(all + 1)
-    setTotal(total + score)
-    setAverage(total / all)
-    setPositive(good / all * 100)
-
     if (score === 1) {
       setGood(good + 1)
     } else if (score === 0) {
@@ -58,8 +50,7 @@ function App() {
       <DisplayStat name={'bad'} stat={bad} />
       <DisplayStat name={'all'} stat={all} />
       <DisplayStat name={'average'} stat={average} />
-      <DisplayStat name={'positive'} stat={positive} />
-
+      <DisplayStat name={'positive'} stat={''.concat(positive,' %')} />
     </div>
   )
 }
