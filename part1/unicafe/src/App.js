@@ -12,6 +12,24 @@ const DisplayStat = ({name, stat}) => (
   </div>
 )
 
+const Statistics = ({good, neutral, bad}) => {
+  const all = good + neutral + bad
+  const average = (good - bad) / all
+  const positive = good / all * 100
+  
+  return (
+    <div>
+      <DisplayHeading text={'statistics'} />
+      <DisplayStat name={'good'} stat={good} />
+      <DisplayStat name={'neutral'} stat={neutral} />
+      <DisplayStat name={'bad'} stat={bad} />
+      <DisplayStat name={'all'} stat={all} />
+      <DisplayStat name={'average'} stat={average} />
+      <DisplayStat name={'positive'} stat={''.concat(positive,' %')} />
+    </div>
+  )
+}
+
 const Button = ({onClick, text}) => (
   <button onClick={onClick}>
     {text}
@@ -22,10 +40,6 @@ function App() {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-
-  const all = good + neutral + bad
-  const average = (good - bad) / all
-  const positive = good / all * 100
 
   const setScore = (score) => () => {
     if (score === 1) {
@@ -43,14 +57,8 @@ function App() {
       <Button onClick={setScore(1)} text={'good'}/>
       <Button onClick={setScore(0)} text={'neutral'}/>
       <Button onClick={setScore(-1)} text={'bad'}/>
-
-      <DisplayHeading text={'statistics'} />
-      <DisplayStat name={'good'} stat={good} />
-      <DisplayStat name={'neutral'} stat={neutral} />
-      <DisplayStat name={'bad'} stat={bad} />
-      <DisplayStat name={'all'} stat={all} />
-      <DisplayStat name={'average'} stat={average} />
-      <DisplayStat name={'positive'} stat={''.concat(positive,' %')} />
+      
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
