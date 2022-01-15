@@ -6,9 +6,9 @@ const DisplayHeading = ({text}) => (
   </h1>
 )
 
-const DisplayStat = ({name, stat}) => (
+const StatisticLine = ({text, stat}) => (
   <div>
-    {name} {stat}
+    {text} {stat}
   </div>
 )
 
@@ -28,22 +28,24 @@ const Statistics = ({good, neutral, bad}) => {
     return (
       <div>
         <DisplayHeading text={'statistics'} />
-        <DisplayStat name={'good'} stat={good} />
-        <DisplayStat name={'neutral'} stat={neutral} />
-        <DisplayStat name={'bad'} stat={bad} />
-        <DisplayStat name={'all'} stat={all} />
-        <DisplayStat name={'average'} stat={average} />
-        <DisplayStat name={'positive'} stat={''.concat(positive,' %')} />
+        <StatisticLine text={'good'} stat={good} />
+        <StatisticLine text={'neutral'} stat={neutral} />
+        <StatisticLine text={'bad'} stat={bad} />
+        <StatisticLine text={'all'} stat={all} />
+        <StatisticLine text={'average'} stat={average} />
+        <StatisticLine text={'positive'} stat={''.concat(positive,' %')} />
       </div>
     )  
   }
   
 }
 
-const Button = ({onClick, text}) => (
-  <button onClick={onClick}>
-    {text}
-  </button>
+const Buttons = ({setScore}) => (
+  <div>
+    <button onClick={setScore(1)}> good </button>
+    <button onClick={setScore(0)}> neutral </button>
+    <button onClick={setScore(-1)}> bad </button>
+  </div>
 )
 
 function App() {
@@ -64,10 +66,7 @@ function App() {
   return (
     <div>
       <DisplayHeading text={'give feedback'} />
-      <Button onClick={setScore(1)} text={'good'}/>
-      <Button onClick={setScore(0)} text={'neutral'}/>
-      <Button onClick={setScore(-1)} text={'bad'}/>
-
+      <Buttons setScore={setScore}/>
       <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
