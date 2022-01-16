@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 
-const Next = ({onClick}) => {
-  return (
-    <div>
-      <button onClick={() => onClick(Math.round(Math.random() * 5))}>next anecdote</button>
-    </div>
-  )
-}
+const Button = ({onClick, text}) => (
+  <button onClick={onClick}>{text}</button>
+)
+
+const ShowVotes = ({votes}) => (
+  <div>
+    has {votes} votes
+  </div>
+)
 
 const App = () => {
   const anecdotes = [
@@ -20,11 +22,26 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+
+  console.log(votes)
+
+  const next = () => Math.round(Math.random() * (anecdotes.length - 1))
+
+  const updateVotes = () => {
+    const temp = [...votes]
+    temp[selected] += 1
+    return temp
+  }
 
   return (
     <div>
       {anecdotes[selected]}
-      <Next onClick={setSelected} />
+      <ShowVotes votes={votes[selected]}/>
+      <div>
+        <Button onClick={() => setVotes(updateVotes())} text={'vote'}/>
+        <Button onClick={() => setSelected(next)} text={'next anecdote'} />
+      </div>
     </div>
   )
 }
