@@ -1,27 +1,27 @@
 import React from "react"
 
-const Header = (prop) => {
+const Header = ({text}) => {
   return (
     <h1>
-      {prop.course}
+      {text}
     </h1>
   )
 }
 
-const Content = (prop) => {
+const Content = ({parts}) => {
   return (
-    <p>
-      <Part part={prop.parts[0].name} exercise={prop.parts[0].exercises}/>
-      <Part part={prop.parts[1].name} exercise={prop.parts[1].exercises}/>
-      <Part part={prop.parts[2].name} exercise={prop.parts[2].exercises}/>
-    </p>
+    <div>
+      {parts.map(part => 
+        <Part key={part.id} name={part.name} exercises={part.exercises}/>
+      )}
+    </div>
   )
 }
 
-const Part = (prop) => {
+const Part = ({name, exercises}) => {
   return (
     <p>
-      {prop.part} {prop.exercise}
+      {name} {exercises}
     </p>
   )
 }
@@ -34,19 +34,30 @@ const Total = (prop) => {
   )
 }
 
+const Course = ({course}) => (
+  <div>
+    <Header key={course.id} text={course.name} />
+    <Content parts={course.parts}/>
+  </div>
+)
+
 const App = () => {
   const course = {
+    id: 1,
     name: 'Half Stack application development',
     parts: [
       {
+        id: 1,
         name: 'Fundamentals of React',
         exercises: 10
       },
       {
+        id: 2,
         name: 'Using props to pass data',
         exercises: 7
       },
       {
+        id: 3,
         name: 'State of a component',
         exercises: 14
       }
@@ -57,9 +68,7 @@ const App = () => {
 
   return (
     <div>
-      <Header course={course.name}/>
-      <Content parts={course.parts}/>
-      <Total parts={course.parts}/>
+      <Course course={course} />
     </div>
   )
 }
