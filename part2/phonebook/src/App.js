@@ -2,20 +2,24 @@ import React, {useState} from 'react'
 
 const Entry = ({person}) => (
   <div>
-    {person.name}
+    {person.name} {person.number}
   </div>
 )
 
 function App() {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' },
+    { name: 'Arto Hellas',
+      number: '040-123456'
+  },
   ]) 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
-      name: newName
+      name: newName,
+      number: newNumber
     }
 
     if (!persons.some(person => person.name === newName)) {
@@ -24,6 +28,7 @@ function App() {
       alert(`${newName} is already added to the phonebook`)
     }
     setNewName('')
+    setNewNumber('')
   }
 
   return (
@@ -32,6 +37,9 @@ function App() {
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={(event) => setNewName(event.target.value)}/>
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={(event) => setNewNumber(event.target.value)}/>
         </div>
         <div>
           <button type="submit">add</button>
