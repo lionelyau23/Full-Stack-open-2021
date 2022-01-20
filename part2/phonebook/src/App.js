@@ -40,29 +40,26 @@ function App() {
       // id: persons.length + 1
     }
 
-    if (!persons.some(person => {
-      if (person.name === newName) {
-        personObject.id = person.id
-        return true
-      } else {
-        return false
-      }
-    })) {
-      personService
-        .create(personObject)
-        .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
+    const duplicate = persons.filter(person => person.name === newName)
 
-          setNotification(`Added ${returnedPerson.name}`)
-          setTimeout(() => {
-            setNotification(null)
-          }, 3000)
-  
-        })
+    if (duplicate.length === 0) {
+      personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+
+        setNotification(`Added ${returnedPerson.name}`)
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000)
+
+      })
 
     } else {
+      personObject.id = duplicate[0].id
       updatePerson(personObject)
     }
+
     setNewName('')
     setNewNumber('')
   }
@@ -82,18 +79,22 @@ function App() {
       personService
         .update(person.id, person)
         .then(returnedPerson => {
+
           setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
           setNotification(`Updated ${returnedPerson.name}'s number`)
           setTimeout(() => {
             setNotification(null)
           }, 3000)
+
         })
         .catch(() => {
+
           setWarning(`Information of ${person.name} has already been removed from the server`)
           setTimeout(() => {
             setWarning(null)
           }, 3000)
           setPersons(persons.filter(p => p.name !== person.name))
+
         })
     }
   }
