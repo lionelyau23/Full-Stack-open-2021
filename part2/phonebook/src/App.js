@@ -26,12 +26,36 @@ const Notification = ({message}) => {
   )
 } 
 
+const Warning = ({message}) => {
+  if (message == null) {
+    return null
+  }
+
+  const notiStyle = {  
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  return (
+    <div style={notiStyle}>
+      {message}
+    </div>
+  )
+} 
+
+
 function App() {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [notification, setNotification] = useState(null)
+  const [warning, setWarning] = useState(null)
 
   useEffect(() => {
     personService
@@ -96,7 +120,13 @@ function App() {
           setTimeout(() => {
             setNotification(null)
           }, 3000)
-
+        })
+        .catch(() => {
+          setWarning(`Information of ${person.name} has already been removed from the server`)
+          setTimeout(() => {
+            setWarning(null)
+          }, 3000)
+          setPersons(persons.filter(p => p.name !== person.name))
         })
     }
   }
@@ -104,7 +134,8 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification}/>
+      <Notification message={notification} />
+      <Warning message={warning} />
       <Filter value={filter} onChange={(event) => setFilter(event.target.value)}/>
       <h3>add a new</h3>
       <PersonForm submit={addPerson} 
