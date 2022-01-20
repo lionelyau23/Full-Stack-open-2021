@@ -47,12 +47,7 @@ function App() {
       .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
-
-        setNotification(`Added ${returnedPerson.name}`)
-        setTimeout(() => {
-          setNotification(null)
-        }, 3000)
-
+        showNotification(`Added ${returnedPerson.name}`, 'notification')
       })
 
     } else {
@@ -79,23 +74,29 @@ function App() {
       personService
         .update(person.id, person)
         .then(returnedPerson => {
-
           setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
-          setNotification(`Updated ${returnedPerson.name}'s number`)
-          setTimeout(() => {
-            setNotification(null)
-          }, 3000)
-
+          showNotification(`Updated ${returnedPerson.name}'s number`, 'notification')
         })
         .catch(() => {
-
-          setWarning(`Information of ${person.name} has already been removed from the server`)
-          setTimeout(() => {
-            setWarning(null)
-          }, 3000)
           setPersons(persons.filter(p => p.name !== person.name))
-
+          showNotification(`Information of ${person.name} has already been removed from the server`, 'warning')
         })
+    }
+  }
+
+  const showNotification = (message, type) => {
+    if (type === 'notification') {
+      setNotification(message)
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
+
+    } else {
+      setWarning(message)
+      setTimeout(() => {
+        setWarning(null)
+      }, 3000)
+
     }
   }
 
