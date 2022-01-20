@@ -26,13 +26,20 @@ function App() {
       // id: persons.length + 1
     }
 
-    if (!persons.some(person => person.name === newName)) {
+    if (!persons.some(person => {
+      if (person.name === newName) {
+        personObject.id = person.id
+        return true
+      } else {
+        return false
+      }
+    })) {
       personService
         .create(personObject)
         .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
 
     } else {
-      alert(`${newName} is already added to the phonebook`)
+      updatePerson(personObject)
     }
     setNewName('')
     setNewNumber('')
@@ -42,8 +49,18 @@ function App() {
     if (window.confirm(`Delete ${person.name} ?`)) {
       personService
         .deleteEntry(person.id)
-        .then(response => {
+        .then(() => {
           setPersons(persons.filter(i => i.id !== person.id))
+        })
+    }
+  }
+
+  const updatePerson = (person) => {
+    if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
+      personService
+        .update(person.id, person)
+        .then(returnedPerson => {
+          setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
         })
     }
   }
@@ -58,7 +75,7 @@ function App() {
         numValue={newNumber} numOnChange={(event) => setNewNumber(event.target.value)}
       />
       <h3>Numbers</h3>
-      <Persons persons={filtered} onClick={deletePerson}/>
+      <Persons persons={filtered} deletePerson={deletePerson}/>
     </div>
   )
 }
