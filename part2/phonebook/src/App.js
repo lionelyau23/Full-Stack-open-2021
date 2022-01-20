@@ -38,6 +38,16 @@ function App() {
     setNewNumber('')
   }
 
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+        .deleteEntry(person.id)
+        .then(response => {
+          setPersons(persons.filter(i => i.id !== person.id))
+        })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -48,7 +58,7 @@ function App() {
         numValue={newNumber} numOnChange={(event) => setNewNumber(event.target.value)}
       />
       <h3>Numbers</h3>
-      <Persons persons={filtered}/>
+      <Persons persons={filtered} onClick={deletePerson}/>
     </div>
   )
 }
