@@ -65,6 +65,7 @@ function App() {
         .deleteEntry(person.id)
         .then(() => {
           setPersons(persons.filter(i => i.id !== person.id))
+          showNotification(`Deleted ${person.name}'s entry from phonebook`, 'notification')
         })
     }
   }
