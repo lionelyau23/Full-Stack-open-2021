@@ -4,11 +4,34 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
 
+const Notification = ({message}) => {
+  if (message == null) {
+    return null
+  }
+
+  const notiStyle = {  
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  return (
+    <div style={notiStyle}>
+      {message}
+    </div>
+  )
+} 
+
 function App() {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService
@@ -36,7 +59,15 @@ function App() {
     })) {
       personService
         .create(personObject)
-        .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+
+          setNotification(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 3000)
+  
+        })
 
     } else {
       updatePerson(personObject)
@@ -61,6 +92,11 @@ function App() {
         .update(person.id, person)
         .then(returnedPerson => {
           setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+          setNotification(`Updated ${returnedPerson.name}'s number`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 3000)
+
         })
     }
   }
@@ -68,6 +104,7 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification}/>
       <Filter value={filter} onChange={(event) => setFilter(event.target.value)}/>
       <h3>add a new</h3>
       <PersonForm submit={addPerson} 
