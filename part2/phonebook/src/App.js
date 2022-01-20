@@ -25,18 +25,23 @@ function App() {
 
   useEffect(hook, [])
 
-  const filtered = (filter === '') ? persons : persons.filter(person => person.name.toLowerCase().includes(filter))
+  const filtered = (filter === '') ? persons : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+      // id: persons.length + 1
     }
 
     if (!persons.some(person => person.name === newName)) {
-      setPersons(persons.concat(personObject))
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+        })
+
     } else {
       alert(`${newName} is already added to the phonebook`)
     }
@@ -44,16 +49,10 @@ function App() {
     setNewNumber('')
   }
 
-  const updateFilter = (event) => {
-    let f = event.target.value
-    setFilter(f.toLowerCase())
-    // console.log(f)
-  }
-
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter value={filter} onChange={updateFilter}/>
+      <Filter value={filter} onChange={(event) => setFilter(event.target.value)}/>
       <h3>add a new</h3>
       <PersonForm submit={addPerson} 
         nameValue={newName} nameOnChange={(event) => setNewName(event.target.value)}
