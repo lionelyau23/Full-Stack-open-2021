@@ -4,14 +4,14 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
 
-const Notification = ({message, type}) => {
-  if (message == null) {
+const Notification = ({notification}) => {
+  if (notification === null) {
     return null
   }
 
   return (
-    <div className={type}>
-      {message}
+    <div className={notification.type}>
+      {notification.message}
     </div>
   )
 } 
@@ -22,7 +22,6 @@ function App() {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [notification, setNotification] = useState(null)
-  const [warning, setWarning] = useState(null)
 
   useEffect(() => {
     personService
@@ -86,26 +85,21 @@ function App() {
   }
 
   const showNotification = (message, type) => {
-    if (type === 'notification') {
-      setNotification(message)
-      setTimeout(() => {
-        setNotification(null)
-      }, 3000)
 
-    } else {
-      setWarning(message)
-      setTimeout(() => {
-        setWarning(null)
-      }, 3000)
+    setNotification({
+      message: message,
+      type: type
+    })
 
-    }
+    setTimeout(() => {
+      setNotification(null)
+    }, 3000)
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} type='notification'/>
-      <Notification message={warning} type='warning'/>
+      <Notification notification={notification} />
       <Filter value={filter} onChange={(event) => setFilter(event.target.value)}/>
       <h3>add a new</h3>
       <PersonForm submit={addPerson} 
