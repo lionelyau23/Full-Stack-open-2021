@@ -89,7 +89,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Notes</h1>
+      <h1>Notes123456</h1>
       <Notification message={errorMessage}/>
       <div>
         <button onClick={() => setShowAll(!showAll)}>
