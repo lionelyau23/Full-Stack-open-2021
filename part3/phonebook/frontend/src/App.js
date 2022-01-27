@@ -43,11 +43,15 @@ function App() {
 
     if (duplicate.length === 0) {
       personService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        showNotification(`Added ${returnedPerson.name}`, 'notification')
-      })
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          showNotification(`Added ${returnedPerson.name}`, 'notification')
+        })
+        .catch(error => {
+          showNotification(error.response.data.error, 'warning')
+          console.log(error.response.data.error)
+        })
 
     } else {
       personObject.id = duplicate[0].id
@@ -77,9 +81,11 @@ function App() {
           setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
           showNotification(`Updated ${returnedPerson.name}'s number`, 'notification')
         })
-        .catch(() => {
-          setPersons(persons.filter(p => p.name !== person.name))
-          showNotification(`Information of ${person.name} has already been removed from the server`, 'warning')
+        .catch(error => {
+          // console.log(error.response.data.error)
+          // setPersons(persons.filter(p => p.name !== person.name))
+          // showNotification(`Information of ${person.name} has already been removed from the server`, 'warning')
+          showNotification(error.response.data.error, 'warning')
         })
     }
   }
