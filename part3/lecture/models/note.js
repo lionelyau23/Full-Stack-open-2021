@@ -1,6 +1,4 @@
 const mongoose = require('mongoose')
-const logger = require('../utils/logger')
-const config = require('../utils/config')
 
 const noteSchema = new mongoose.Schema({
     content: {
