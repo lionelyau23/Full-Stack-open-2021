@@ -1,0 +1,22 @@
+{
+  "name": "bloglist",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "lionelyau",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.7.0",
+    "eslint-plugin-react": "^7.28.0",
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.8"
+  }
+}
