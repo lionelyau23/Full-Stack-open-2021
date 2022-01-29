@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "dev": "nodemon index.js"
   },
   "author": "lionelyau",
@@ -12,6 +12,7 @@
   "devDependencies": {
     "eslint": "^8.7.0",
     "eslint-plugin-react": "^7.28.0",
+    "jest": "^27.4.7",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
