@@ -52,7 +52,23 @@ describe('post route tests', () => {
         expect(updatedBlogs).toHaveLength(helper.testBlogs.length + 1)
 
         const blogContent = updatedBlogs.map(b => b.title)
-        expect(blogContent).toContainEqual('new blog')
+        expect(blogContent).toContainEqual(newBlog.title)
+    })
+
+    test('if no likes is added, default to 0 likes', async () => {
+        const noLikeBlog = { ...newBlog }
+        delete noLikeBlog.likes
+
+        console.log(noLikeBlog)
+
+        const response = await api
+            .post('/api/blogs')
+            .send(noLikeBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const savedBlog = response.body
+        expect(savedBlog.likes).toBe(0)
     })
 })
 
