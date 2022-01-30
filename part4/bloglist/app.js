@@ -16,6 +16,6 @@ mongoose
 app.use(cors())
 app.use(express.json())
 
-app.use('/', blogRouter)
+app.use('/api/blogs', blogRouter)
 
 module.exports = app
