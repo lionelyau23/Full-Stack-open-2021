@@ -59,8 +59,6 @@ describe('post route tests', () => {
         const noLikeBlog = { ...newBlog }
         delete noLikeBlog.likes
 
-        console.log(noLikeBlog)
-
         const response = await api
             .post('/api/blogs')
             .send(noLikeBlog)
@@ -70,6 +68,34 @@ describe('post route tests', () => {
         const savedBlog = response.body
         expect(savedBlog.likes).toBe(0)
     })
+
+    test('if title is missing, server responds with 400', async () => {
+        const noTitleBlog = { ...newBlog }
+        delete noTitleBlog.title
+
+        await api
+            .post('/api/blogs')
+            .send(noTitleBlog)
+            .expect(400)
+
+        const response = await helper.blogsInDB()
+        expect(response).toHaveLength(helper.testBlogs.length)
+    })
+
+    test('if url is missing, server responds with 400', async () => {
+        const noUrlBlog = { ...newBlog }
+        delete noUrlBlog.url
+
+        await api
+            .post('/api/blogs')
+            .send(noUrlBlog)
+            .expect(400)
+
+        const response = await helper.blogsInDB()
+        expect(response).toHaveLength(helper.testBlogs.length)
+
+    })
+
 })
 
 afterAll(() => {
