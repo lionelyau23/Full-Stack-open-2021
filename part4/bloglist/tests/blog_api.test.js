@@ -33,7 +33,7 @@ describe('get route tests', () => {
     })
 })
 
-describe('post route tests', () => {
+describe('addition of new blogs', () => {
     const newBlog = {
         title: 'new blog',
         author: 'John Doe new',
@@ -96,6 +96,23 @@ describe('post route tests', () => {
 
     })
 
+})
+
+describe('deletion of blog', () => {
+    test('successfully delet a blog with 204 status', async () => {
+        const blogsInDB = await helper.blogsInDB()
+        const deleteBlog = blogsInDB[0]
+
+        await api
+            .delete(`/api/blogs/${deleteBlog.id}`)
+            .expect(204)
+
+        const updatedBlogs = await helper.blogsInDB()
+        expect(updatedBlogs).toHaveLength(helper.testBlogs.length - 1)
+
+        const titles = await updatedBlogs.map(b => b.title)
+        expect(titles).not.toContain(deleteBlog.title)
+    })
 })
 
 afterAll(() => {
