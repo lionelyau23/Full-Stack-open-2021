@@ -13,7 +13,7 @@ beforeEach(async () => {
     await Promise.all(promiseArray)
 })
 
-describe('initialization tests', () => {
+describe('get route tests', () => {
     test('blogs are returned as json', async () => {
         await api
             .get('/api/blogs')
@@ -24,6 +24,13 @@ describe('initialization tests', () => {
     test('all blogs are returned', async () => {
         const blogs = (await api.get('/api/blogs')).body
         expect(blogs).toHaveLength(helper.testBlogs.length)
+    })
+
+    test('returned blog has id as unique identifier instead of _id', async () => {
+        const blogs = (await api.get('/api/blogs')).body
+        expect(blogs[0].id).toBeDefined()
+        expect(blogs[0]._id).not.toBeDefined()
+        expect(blogs[0].__v).not.toBeDefined()
     })
 })
 
