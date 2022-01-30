@@ -7,7 +7,6 @@ const helper = require('./api_test_helper')
 
 beforeEach(async () => {
     await Blog.deleteMany()
-
     const blogs = helper.testBlogs.map(b => new Blog(b))
     const promiseArray = blogs.map(b => b.save())
     await Promise.all(promiseArray)
@@ -31,6 +30,29 @@ describe('get route tests', () => {
         expect(blogs[0].id).toBeDefined()
         expect(blogs[0]._id).not.toBeDefined()
         expect(blogs[0].__v).not.toBeDefined()
+    })
+})
+
+describe('post route tests', () => {
+    const newBlog = {
+        title: 'new blog',
+        author: 'John Doe new',
+        url: 'new.com',
+        likes: 10
+    }
+
+    test('number of blogs increase by one, new blog in blog list', async () => {
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const updatedBlogs = await helper.blogsInDB()
+        expect(updatedBlogs).toHaveLength(helper.testBlogs.length + 1)
+
+        const blogContent = updatedBlogs.map(b => b.title)
+        expect(blogContent).toContainEqual('new blog')
     })
 })
 
