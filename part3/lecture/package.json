@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --verbose",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose --runInBand",
     "build:ui": "rm -rf build && cd ../../part2/lecture && npm run build && cp -r build ../../part3/lecture",
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
@@ -19,13 +19,15 @@
     "cors": "^2.8.5",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
+    "express-async-errors": "^3.1.1",
     "mongoose": "^6.1.8"
   },
   "devDependencies": {
     "eslint": "^8.7.0",
     "eslint-plugin-react": "^7.28.0",
     "jest": "^27.4.7",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   },
   "jest": {
     "testEnvironment": "node"
