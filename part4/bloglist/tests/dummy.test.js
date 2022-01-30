@@ -82,6 +82,15 @@ describe('total likes', () => {
 })
 
 describe('favourite blog', () => {
+    test('single blog only', () => {
+        const result = listHelper.favouriteBlog(listWithOneBlog)
+        expect(result).toEqual({
+            title: 'Go To Statement Considered Harmful',
+            author: 'Edsger W. Dijkstra',
+            likes: 5,
+        })
+    })
+
     test('return blog with most likes', () => {
         const result = listHelper.favouriteBlog(blogs)
         expect(result).toEqual({
