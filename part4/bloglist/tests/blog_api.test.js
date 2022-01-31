@@ -115,6 +115,24 @@ describe('deletion of blog', () => {
     })
 })
 
+describe('update a blog', () => {
+    test('return 200 status if update is successfull', async () => {
+        const blogsInDB = await helper.blogsInDB()
+        const updateBlog = { ...blogsInDB[0] }
+        updateBlog.likes = 101
+
+        await api
+            .put(`/api/blogs/${updateBlog.id}`)
+            .send(updateBlog)
+            .expect(200)
+
+        const updatedBlogs = await helper.blogsInDB()
+        const likes = updatedBlogs.map(b => b.likes)
+
+        expect(likes).toContain(101)
+    })
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
