@@ -46,6 +46,36 @@ describe('test with initial state of user', () => {
     })
 })
 
+describe('post route tests', () => {
+    const validUser = {
+        username: 'jane123',
+        name: 'Jane Doe',
+        password: '000123'
+    }
+
+    test('valid user can be added', async () => {
+        const response = await api
+            .post('/api/users')
+            .send(validUser)
+            .expect(200)
+            .expect('Content-Type',/application\/json/)
+
+        const savedUser = response.body
+        expect(savedUser.username).toBe(validUser.username)
+        expect(savedUser.name).toBe(validUser.name)
+        expect(savedUser.password).not.toBeDefined()
+        expect(savedUser.passwordHash).not.toBeDefined()
+    })
+
+    // test('test invalid username, respond with 400', async () => {
+    //     const
+
+    //     await api
+    //         .post('/api/users')
+    //         .send()
+    // })
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
