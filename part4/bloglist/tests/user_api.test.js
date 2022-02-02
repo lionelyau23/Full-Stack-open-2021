@@ -47,13 +47,13 @@ describe('test with initial state of user', () => {
 })
 
 describe('post route tests', () => {
-    const validUser = {
-        username: 'jane123',
-        name: 'Jane Doe',
-        password: '000123'
-    }
-
     test('valid user can be added', async () => {
+        const validUser = {
+            username: 'jane123',
+            name: 'Jane Doe',
+            password: '000123'
+        }
+
         const response = await api
             .post('/api/users')
             .send(validUser)
@@ -65,15 +65,109 @@ describe('post route tests', () => {
         expect(savedUser.name).toBe(validUser.name)
         expect(savedUser.password).not.toBeDefined()
         expect(savedUser.passwordHash).not.toBeDefined()
+
+        const usersInDB = await helper.usersInDB()
+        expect(usersInDB).toHaveLength(helper.testUsers.length + 1)
     })
 
-    // test('test invalid username, respond with 400', async () => {
-    //     const
+    test('no username, respond with 400, not saved in DB', async () => {
+        const invalidUser = {
+            name: 'Jane Doe',
+            password: '000123'
+        }
 
-    //     await api
-    //         .post('/api/users')
-    //         .send()
-    // })
+        await api
+            .post('/api/users')
+            .send(invalidUser)
+            .expect(400)
+            .expect('Content-Type',/application\/json/)
+
+        const currentUsers = await helper.usersInDB()
+        expect(currentUsers).toHaveLength(helper.testUsers.length)
+    })
+
+    test('username too short, respond with 400', async () => {
+        const invalidUser = {
+            username: 'ja' ,
+            name: 'Jane Doe',
+            password: '000123'
+        }
+
+        await api
+            .post('/api/users')
+            .send(invalidUser)
+            .expect(400)
+            .expect('Content-Type',/application\/json/)
+
+        const currentUsers = await helper.usersInDB()
+        expect(currentUsers).toHaveLength(helper.testUsers.length)
+        const usernames = currentUsers.map(u => u.username)
+        expect(usernames).not.toContain('ja')
+    })
+
+    test('repeated username, respond with 400', async () => {
+        const usersAtStart = await helper.usersInDB()
+
+        const invalidUser = {
+            username: usersAtStart[0].username ,
+            name: 'Doe Duplicate',
+            password: '000123'
+        }
+
+        const response = await api
+            .post('/api/users')
+            .send(invalidUser)
+            .expect(400)
+            .expect('Content-Type',/application\/json/)
+
+        expect(response.body.error).toContain('`username` to be unique')
+
+        const usersAtEnd = await helper.usersInDB()
+        expect(usersAtEnd).toHaveLength(usersAtStart.length)
+        const names = usersAtEnd.map(u => u.name)
+        expect(names).not.toContain('Doe Duplicate')
+    })
+
+    test('no password, respond with 400', async () => {
+        const invalidUser = {
+            username: 'ja' ,
+            name: 'Jane Doe'
+        }
+
+        const response = await api
+            .post('/api/users')
+            .send(invalidUser)
+            .expect(400)
+            .expect('Content-Type',/application\/json/)
+
+        expect(response.body.error).toBe('password is missing')
+
+        const currentUsers = await helper.usersInDB()
+        expect(currentUsers).toHaveLength(helper.testUsers.length)
+        const usernames = currentUsers.map(u => u.username)
+        expect(usernames).not.toContain('ja')
+    })
+
+    test('password too short, respond with 400', async () => {
+        const invalidUser = {
+            username: 'ja' ,
+            name: 'Jane Doe',
+            password: '1'
+        }
+
+        const response = await api
+            .post('/api/users')
+            .send(invalidUser)
+            .expect(400)
+            .expect('Content-Type',/application\/json/)
+
+        expect(response.body.error).toBe('password is too short')
+
+        const currentUsers = await helper.usersInDB()
+        expect(currentUsers).toHaveLength(helper.testUsers.length)
+        const usernames = currentUsers.map(u => u.username)
+        expect(usernames).not.toContain('ja')
+    })
 })
 
 afterAll(() => {
