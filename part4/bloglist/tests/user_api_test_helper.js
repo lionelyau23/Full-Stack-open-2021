@@ -6,16 +6,19 @@ const testUsers = [
         username: 'johndoe01',
         name: 'John Doe 1',
         password: '0123456',
+        blogs: []
     },
     {
         username: 'johndoe02',
         name: 'John Doe 2',
         password: '0223456',
+        blogs: []
     },
     {
         username: 'johndoe03',
         name: 'John Doe 3',
         password: '0323456',
+        blogs: []
     },
 ]
 

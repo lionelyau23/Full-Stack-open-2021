@@ -1,8 +1,8 @@
 // const logger = require('../utils/logger')
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+// const User = require('../models/user')
+// const jwt = require('jsonwebtoken')
 
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog
@@ -41,6 +41,10 @@ blogRouter.delete('/:id', async (request, response) => {
 
     if (!blog) {
         return response.status(404).json({ error: 'blog id not found' })
+    }
+
+    if (!user) {
+        return response.status(401).json({ error: 'user authorization failed' })
     }
 
     if (user._id.toString() === blog.user.toString()) {

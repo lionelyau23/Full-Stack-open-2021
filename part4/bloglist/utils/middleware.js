@@ -51,7 +51,7 @@ const userExtrator = async (request, response, next) => {
         request.user = await User.findById(decodedToken.id)
     } else {
         request.user = null
-        next(new Error('missingToken'))
+        // next(new Error('missingToken'))
     }
 
     next()
